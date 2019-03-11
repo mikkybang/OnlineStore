@@ -6,6 +6,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+const item_router = require('./routes/item_route');
+app.use('/items', item_router);
+
 port = 5000;
 
 app.listen(port, () => {

@@ -3,23 +3,22 @@ const ItemCategory = require("../models/itemcategory");
 
 const ResourceNotFoundError = require("../errors");
 
-exports.create_item = (name, category, price, decription = "") => {
+exports.create_item = (name, category, price, description) => {
     return new Promise((resolve, reject) => {
         ItemCategory.findOne({ category: category })
         .then((result) => {
             if (result == null) {
                 throw new ResourceNotFoundError(category); 
             }
-            var item = new Item({
+            
+            let item = new Item({
                 name: name,
                 category: result._id,
                 price: price,
-                decription: description
+                description: description
             });
-            console.log(item);
             item.save(item, (err, item) => {
                 if (err) reject(err);
-                console.log(item);
                 resolve(item);
             });
         }).catch((err) => {

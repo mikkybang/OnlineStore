@@ -1,32 +1,24 @@
-var expect  = require('chai').expect;
-var request = require('request');
+const mongoose = require('mongoose');
+const Item = require('../models/item');
+const ItemCategory = require('../models/itemcategory');
 
-const server = 'http://localhost:5000'
+const chai  = require('chai');
+const chaiHttp = require('chai-http');
 
-describe("Items Api Test", function () {
-    const itemsEndpoint = server+'/items';
-    it('Test get item by id', function (done) {
-        request(itemsEndpoint+'/id/:1' , function (error, response, body) {
-            expect(response.statusCode).to.equal(200);
-            expect(body).to.equal('Get Item');
-            done();
+const server = require('../app');
+
+const should = chai.should;
+
+chai.use(chaiHttp);
+
+describe('Items', () => {
+    beforeEach((done) => {
+        Item.remove({})
+        .then(() => {
+            ItemCategory.remove({})
+            .then(() => {
+                done();
+            });
         });
     });
-
-    it('Test get items by category', function (done) {
-        request(itemsEndpoint+"/category", function (error, response, body) {
-            expect(response.statusCode).to.equal(200);
-            expect(body).to.equal('Get Items By Category');
-            done();
-        });
-    });
-
-    it("Test post item", function (done) {
-        request(itemsEndpoint, { method: "POST" }, function (error, response, body) {
-            expect(response.statusCode).to.equal(200);
-            expect(body).to.equal('Create Item');
-            done();
-        });
-    });
-
 });

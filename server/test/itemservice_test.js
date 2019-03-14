@@ -8,6 +8,14 @@ let itemservice = require("../services/itemservice");
 
 const Item = require('../models/item');
 
+const mockItem = (mockObj) => {
+    mock('../models/item', mockObj);
+}
+
+const mockItemCategory = (mockObj) => {
+    mock('../models/itemcategory', mockObj);
+}
+
 describe("Item Service", function () {
     beforeEach((done) => {
         mock.stopAll();
@@ -17,8 +25,9 @@ describe("Item Service", function () {
         });
     });
     describe("Create Item", () => {
-        it("should throw an instance of ResourceNotFoundError", (done) => {
-            mock('../models/itemcategory', {
+        it("should throw an instance of ResourceNotFoundError",
+         (done) => {
+            mockItemCategory({
                 findOne: (query) => {
                     return new Promise((resolve, reject) => {
                         resolve(null);
@@ -37,7 +46,7 @@ describe("Item Service", function () {
     
         it('should save', (done) => {
             let mockCategoryId = "41224d776a326fb40f000001";
-            mock('../models/itemcategory', {
+            mockItemCategory({
                 findOne: (query) => {
                     return new Promise((resolve, reject) => {
                         resolve({_id: mockCategoryId});
@@ -73,6 +82,30 @@ describe("Item Service", function () {
             });
         });
 
+    });
+
+    describe("Find Item by Id", () => {
+        it("should throw an instance of ResourceNotFoundError",
+         (done) => {
+            let itemId = '';
+            mockItem({
+                findById: (id) => {
+                    expect(id).to.equal(itemId);
+                    return new Promise((resolve, reject) => {
+                        resolve(null);
+                    });
+                }
+            });
+            itemservice = mock.reRequire('../services/itemservice');
+            itemservice.find_item_by_id(itemId)
+            .then((result) => {
+                expect.fail('a result was returned');
+            }).catch((err) => {
+                expect(err).instanceOf(ResourceNotFoundError);
+                expect(err.message).to.equal(itemId+' was not found on this server');
+                done();
+            });
+        });
     });
 
 });

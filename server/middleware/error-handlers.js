@@ -1,4 +1,4 @@
-const ResourceNotFoundError = require("../errors");
+const ResourceNotFoundError = require("../errors/resourcenotfounderror");
 
 module.exports.resource_not_found = (err, req, res, next) => {
     console.log(err);

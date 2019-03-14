@@ -1,7 +1,7 @@
 const Item = require("../models/item");
 const ItemCategory = require("../models/itemcategory");
 
-const ResourceNotFoundError = require("../errors");
+const ResourceNotFoundError = require("../errors/resourcenotfounderror");
 
 exports.create_item = (name, category, price, description) => {
     return new Promise((resolve, reject) => {

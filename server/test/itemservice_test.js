@@ -2,7 +2,7 @@ const mock = require('mock-require');
 
 const expect = require("chai").expect;
 
-const ResourceNotFoundError = require("../errors");
+const ResourceNotFoundError = require("../errors/resourcenotfounderror");
 
 let itemservice = require("../services/itemservice");
 

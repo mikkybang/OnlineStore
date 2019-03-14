@@ -42,7 +42,7 @@ exports.find_items_by_category = (category) => {
     return new Promise((resolve, reject) => {
         ItemCategory.findOne({category: category})
         .then((category) => {
-            if (category == null) return [];
+            if (category == null) resolve([]);
             Item.find({category: category._id})
             .then((items) => {
                 resolve(items);

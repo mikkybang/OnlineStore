@@ -87,7 +87,7 @@ describe("Item Service", function () {
     describe("Find Item by Id", () => {
         it("should throw an instance of ResourceNotFoundError",
          (done) => {
-            let itemId = '';
+            let itemId = '4b';
             mockItem({
                 findById: (id) => {
                     expect(id).to.equal(itemId);
@@ -106,6 +106,27 @@ describe("Item Service", function () {
                 done();
             });
         });
+
+        it("should return an item", (done) => {
+            let itemId = '4b';
+            mockItem({
+                findById: (id) => {
+                    expect(id).to.equal(itemId);
+                    return Promise.resolve({
+                        id
+                    });
+                }
+            });
+            itemservice = mock.reRequire('../services/itemservice');
+            itemservice.find_item_by_id(itemId)
+            .then((result) => {
+                expect(result.id).to.equal(itemId);
+                done();
+            }).catch((err) => {
+                expect.fail(err.message);
+            });
+        });
+
     });
 
 });

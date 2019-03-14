@@ -129,4 +129,57 @@ describe("Item Service", function () {
 
     });
 
+    describe("Find Items by category", () => {
+        it("should return empty array",
+         (done) => {
+             let category = "test";
+             mockItemCategory({
+                findOne: (query) => {
+                    expect(query.category).to.equal(category);
+                    return Promise.resolve(null);
+                }
+             });
+             itemservice = mock.reRequire('../services/itemservice');
+             itemservice.find_items_by_category(category)
+             .then((result) => {
+                 expect(result).to.empty;
+                 done();
+             }).catch((err) => {
+                 expect.fail(err.message);
+             });
+        });
+        it("should return an array of items",
+         (done) => {
+            let category = "test";
+            let categoryId = "testId";
+            let items = [
+                { _id: '1' }, { _id: '2'}
+            ];
+            mockItemCategory({
+               findOne: (query) => {
+                   expect(query.category).to.equal(category);
+                   return Promise.resolve({
+                       _id: categoryId,
+                       category,
+                   });
+               }
+            });
+
+            mockItem({
+                find: (query) => {
+                    expect(query.category).to.equal(categoryId);
+                    return Promise.resolve(items);
+                }
+            });
+
+            itemservice = mock.reRequire('../services/itemservice');
+            itemservice.find_items_by_category(category)
+            .then((result) => {
+                expect(result).to.deep.equal(items);
+                done();
+            }).catch((err) => {
+                expect.fail(err.message);
+            });
+         });
+    });
 });

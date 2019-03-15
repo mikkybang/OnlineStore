@@ -87,7 +87,7 @@ describe("Test UserService", () => {
                 done();
             });
         });
-        it('should return a user', (done) => {
+        it('should return a user with given id', (done) => {
             let userId = '4b';
             mockUser({
                 findById: (id) => {
@@ -101,6 +101,29 @@ describe("Test UserService", () => {
            userservice.find_user_by_id(userId)
            .then((user) => {
                expect(user).to.deep.include({ _id: userId });
+               done();
+           }).catch((err)  => {
+               expect.fail(err.message);
+           });
+        });
+        
+        it('should return a users that match the given query', (done) => {
+            let query = {username: "John"};
+            let users = [{
+                _id: '1', username: 'John'
+            }, {
+                _id: '2', username: 'John'
+            }];
+            mockUser({
+                find: (obj) => {
+                    expect(obj).to.deep.include(query);
+                    return Promise.resolve(users);
+                }
+            });
+            reRequireUserService();
+           userservice.find_users(query)
+           .then((user) => {
+               expect(users).to.deep.include.members(users);
                done();
            }).catch((err)  => {
                expect.fail(err.message);

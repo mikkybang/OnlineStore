@@ -41,3 +41,7 @@ exports.find_user_by_id = (userId) => {
         });
     });
 }
+
+exports.find_users = (query) => {
+    return User.find(query);
+}

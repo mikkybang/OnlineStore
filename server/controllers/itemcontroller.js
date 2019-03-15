@@ -13,7 +13,6 @@ exports.create_item = (req, res, next) => {
 exports.get_item = (req, res, next) => {
     itemService.find_item_by_id(req.params.itemId)
     .then((item) => {
-        console.log(item);
         res.json(item);
     })
     .catch((err) => {

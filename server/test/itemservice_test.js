@@ -113,16 +113,17 @@ describe("Item Service", function () {
                 findById: (id) => {
                     expect(id).to.equal(itemId);
                     return Promise.resolve({
-                        id
+                        _id: id
                     });
                 }
             });
             itemservice = mock.reRequire('../services/itemservice');
             itemservice.find_item_by_id(itemId)
             .then((result) => {
-                expect(result.id).to.equal(itemId);
+                expect(result._id).to.equal(itemId);
                 done();
             }).catch((err) => {
+                console.error(err);
                 expect.fail(err.message);
             });
         });

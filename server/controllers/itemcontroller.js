@@ -10,6 +10,15 @@ exports.create_item = (req, res, next) => {
     });
 }
 
+exports.get_all_items = (req, res, next) => {
+    itemService.find_all_items()
+    .then((items) => {
+        res.json(items);
+    }).catch((err) => {
+        next(err);
+    });
+}
+
 exports.get_item = (req, res, next) => {
     itemService.find_item_by_id(req.params.itemId)
     .then((item) => {

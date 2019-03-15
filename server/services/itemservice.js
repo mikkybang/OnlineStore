@@ -31,7 +31,14 @@ exports.find_item_by_id = (itemId) => {
     return new Promise((resolve, reject) => {
         Item.findById(itemId).then((result) => {
             if (result == null) throw new ResourceNotFoundError(itemId);
-            resolve(result);
+            ItemCategory.findById(result.category)
+            .then((category) => {
+                let { _id, name, price, description } = result;
+                let item = {
+                    _id, name, price, description, category
+                }
+                resolve(item);
+            });
         }).catch((err) => {
             reject(err);
         });

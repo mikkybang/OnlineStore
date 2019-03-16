@@ -21,7 +21,7 @@ module.exports = (app) => {
             email,
             password
         });
-        it('should return the user matching the given login details', (done) => {
+        it('should return a token and the user matching the given login details', (done) => {
             user.save(user, (err, user) => {
                 authservice.signin(email, password)
                     .then((result) => {
@@ -29,6 +29,7 @@ module.exports = (app) => {
                             expect.fail('the given login details did not match any user');
                         }
                         expect(result).to.have.property('email').to.eq(email);
+                        expect(result).to.have.property('token');
                         done();
                     }).catch((err) => {
                         expect.fail(err.message);

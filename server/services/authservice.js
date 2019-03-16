@@ -14,7 +14,7 @@ exports.signin = (email, password) => {
                 if (err) throw err;
                 if (isMatch) {
                     let token = jwt.sign(user._doc, key);
-                    resolve(user);
+                    resolve(Object.assign(user._doc, { token }));
                 }else resolve(null);
             });
         })

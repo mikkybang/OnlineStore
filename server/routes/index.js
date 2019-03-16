@@ -18,6 +18,7 @@ module.exports = (app) => {
                 let router = require("./"+name);
                 // define global error handling here
                 router.use(resourceNotFoundHandler);
+                router.use(errorHandlers.unauthorised);
                 let endpoint = name.substr(0, name.length - 3);
                 app.use(`/${endpoint}`, router);
             });

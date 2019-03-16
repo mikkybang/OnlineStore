@@ -1,38 +1,24 @@
-const mongoose = require('mongoose');
-const Item = require('../models/item');
-const ItemCategory = require('../models/itemcategory');
+const Item = require('../../models/item');
+const ItemCategory = require('../../models/itemcategory');
 
 const chai  = require('chai');
 const chaiHttp = require('chai-http');
 
-const server = require('../app');
-
 chai.use(chaiHttp);
-const should = chai.should;
 const expect = chai.expect;
-
 
 chai.use(chaiHttp);
 
 const mock = require('mock-require');
 
 const mockItemService = (mockObj) => {
-    mock('../services/itemservice', mockObj);
+    mock('../../services/itemservice', mockObj);
 };
 
-const reRequireApp = () => {
-    server = mock.reRequire('../app');
-};
-
-describe('Test Items API', () => {
+module.exports = (server) => {
     beforeEach((done) => {
-        Item.deleteMany({})
-        .then(() => {
-            ItemCategory.deleteMany({})
-            .then(() => {
-                done();
-            });
-        });
+        mock.stopAll();
+        done();
     });
 
     describe('/GET /items/', () => {
@@ -50,7 +36,7 @@ describe('Test Items API', () => {
             });
         });
     });
-
+    
     describe('/GET /items/:id', () => {
         it('should get item with a given id', (done) => {
             let category = new ItemCategory({
@@ -63,7 +49,7 @@ describe('Test Items API', () => {
                     category: category.id,
                     description: 'this is a test item'
                 });
-
+    
                 item.save(item, (err, item) => {
                     chai.request(server)
                     .get('/items/id/'+item.id)
@@ -101,6 +87,4 @@ describe('Test Items API', () => {
             });
         });
     });
-
-
-});
+}

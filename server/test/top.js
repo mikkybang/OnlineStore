@@ -28,7 +28,8 @@ describe("", () => {
         });
     });
 
-    importTest('Test Items API', './api/items');
+    importTest('Test Auth API /auth/', './api/auth');
+    importTest('Test Items API /items/', './api/items');
     importTest('Test ItemService', './services/itemservice');
     importTest('Test UserService', './services/userservice');
     importTest('Test AuthService', './services/authservice');

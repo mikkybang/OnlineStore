@@ -7,8 +7,6 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-chai.use(chaiHttp);
-
 const mock = require('mock-require');
 
 const mockItemService = (mockObj) => {

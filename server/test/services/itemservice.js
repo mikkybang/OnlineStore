@@ -4,9 +4,10 @@ const expect = require("chai").expect;
 
 const ResourceNotFoundError = require("../../errors/resourcenotfounderror");
 
-let itemservice = require("../../services/itemservice");
+const itemService = require("../../services/itemservice");
 
 const Item = require('../../models/item');
+const itemcategory = require('../../models/itemcategory');
 
 const mockItem = (mockObj) => {
     mock('../../models/item', mockObj);
@@ -14,6 +15,10 @@ const mockItem = (mockObj) => {
 
 const mockItemCategory = (mockObj) => {
     mock('../../models/itemcategory', mockObj);
+}
+
+const reRequireItemService = () => {
+    itemservice = require('../../services/itemservice');
 }
 
 module.exports = (server) => {
@@ -32,8 +37,8 @@ module.exports = (server) => {
                         });
                     }
                 });
-                itemservice = mock.reRequire('../../services/itemservice');
-                itemservice.create_item("test", "test", 500, "test")
+                let mockItemService = mock.reRequire('../../services/itemservice');
+                mockItemService.create_item("test", "test", 500, "test")
                     .then((item) => {
                         expect.fail();
                     }).catch((err) => {
@@ -52,13 +57,13 @@ module.exports = (server) => {
                 }
             });
 
-            let itemservice = mock.reRequire('../../services/itemservice');
+            let mockItemService = mock.reRequire('../../services/itemservice');
 
             let name = "test item";
             let category = "test";
             let price = 500;
             let description = "test description";
-            itemservice.create_item(name, category, price, description)
+            mockItemService.create_item(name, category, price, description)
                 .then((item) => {
                     let category = item.category.toString();
                     expect(item.name).to.equal(name);
@@ -94,8 +99,8 @@ module.exports = (server) => {
                         });
                     }
                 });
-                itemservice = mock.reRequire('../../services/itemservice');
-                itemservice.find_item_by_id(itemId)
+                let mockItemService = mock.reRequire('../../services/itemservice');
+                mockItemService.find_item_by_id(itemId)
                     .then((result) => {
                         expect.fail('a result was returned');
                     }).catch((err) => {
@@ -115,8 +120,8 @@ module.exports = (server) => {
                     });
                 }
             });
-            itemservice = mock.reRequire('../../services/itemservice');
-            itemservice.find_item_by_id(itemId)
+            let mockItemService = mock.reRequire('../../services/itemservice');
+            mockItemService.find_item_by_id(itemId)
                 .then((result) => {
                     expect(result._id).to.equal(itemId);
                     done();
@@ -138,8 +143,8 @@ module.exports = (server) => {
                         return Promise.resolve(null);
                     }
                 });
-                itemservice = mock.reRequire('../../services/itemservice');
-                itemservice.find_items_by_category(category)
+                let mockItemService = mock.reRequire('../../services/itemservice');
+                mockItemService.find_items_by_category(category)
                     .then((result) => {
                         expect(result).to.empty;
                         done();
@@ -171,8 +176,8 @@ module.exports = (server) => {
                     }
                 });
 
-                itemservice = mock.reRequire('../../services/itemservice');
-                itemservice.find_items_by_category(category)
+                let mockItemService = mock.reRequire('../../services/itemservice');
+                mockItemService.find_items_by_category(category)
                     .then((result) => {
                         expect(result).to.deep.equal(items);
                         done();
@@ -180,5 +185,23 @@ module.exports = (server) => {
                         expect.fail(err.message);
                     });
             });
+    });
+
+    describe("Create Item Category", () => {
+        it('should create a new category', (done) => {
+            itemService.create_category('test')
+                .then((saved) => {
+                    expect(saved).to.have.property('category', 'test');
+                    itemcategory.findOne({ category: 'test' })
+                        .then((result) => {
+                            expect(result).to.have.property('category', 'test');
+                            done();
+                        }).catch((err) => {
+                            throw err;
+                        });
+                }).catch((err) => {
+                    done(err);
+                });
+        });
     });
 }

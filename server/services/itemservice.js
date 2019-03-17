@@ -74,3 +74,10 @@ exports.find_items_by_category = (category) => {
         });
     });
 }
+
+exports.create_category = (category) => {
+    let itemCategory = new ItemCategory({
+        category
+    });
+    return itemCategory.save();
+}

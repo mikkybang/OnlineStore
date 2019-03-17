@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const key = require('../key');
+const key = require('../config').key;
 const userservice = require('../services/userservice');
 
 exports.signin = (email, password) => {

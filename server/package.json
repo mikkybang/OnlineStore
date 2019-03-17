@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/.bin/mocha"
+    "test": "set NODE_ENV=test && mocha"
   },
   "author": "Eunovo",
   "license": "ISC",

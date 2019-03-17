@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
-let dev_db_uri = "mongodb://localhost:27017/SimpleOnlineStore";
+let db_uri = require('./config').database_uri;
 
-mongoose.connect(dev_db_uri, { useNewUrlParser: true });
+mongoose.connect(db_uri, { useNewUrlParser: true });
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

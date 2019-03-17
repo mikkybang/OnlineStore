@@ -28,6 +28,7 @@ describe("", () => {
         });
     });
 
+    importTest('Test Admin API /admin/', './api/admin');
     importTest('Test Auth API /auth/', './api/auth');
     importTest('Test Items API /items/', './api/items');
     importTest('Test ItemService', './services/itemservice');
